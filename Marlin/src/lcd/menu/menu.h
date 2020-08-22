@@ -79,6 +79,16 @@ class MenuItem_static : public MenuItemBase {
     static void draw(const uint8_t row, PGM_P const pstr, const uint8_t style=SS_DEFAULT, const char * const vstr=nullptr);
 };
 
+// BACK_ITEM(LABEL)
+class MenuItem_back : public MenuItemBase {
+  public:
+    FORCE_INLINE static void draw(const bool sel, const uint8_t row, PGM_P const pstr) {
+      _draw(sel, row, pstr, LCD_STR_UPLEVEL[0], LCD_STR_UPLEVEL[0]);
+    }
+    // Back Item action goes back one step in history
+    FORCE_INLINE static void action(PGM_P const=nullptr) { ui.go_back(); }
+};
+
 // CONFIRM_ITEM(LABEL,Y,N,FY,FN,...),
 // YESNO_ITEM(LABEL,FY,FN,...)
 class MenuItem_confirm : public MenuItemBase {
@@ -196,6 +206,7 @@ void menu_move();
 //////// Menu Item Helper Functions ////////
 ////////////////////////////////////////////
 
+void lcd_move_z();
 void _lcd_draw_homing();
 
 #define HAS_LINE_TO_Z ANY(DELTA, PROBE_MANUALLY, MESH_BED_LEVELING, LEVEL_BED_CORNERS)
@@ -229,4 +240,8 @@ void _lcd_draw_homing();
     #define BABYSTEP_SIZE_Z BABYSTEP_MULTIPLICATOR_Z
   #endif
 
+#endif
+
+#if ENABLED(TOUCH_SCREEN_CALIBRATION)
+  void touch_screen_calibration();
 #endif
